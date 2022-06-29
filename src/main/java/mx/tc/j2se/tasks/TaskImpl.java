@@ -46,6 +46,7 @@ public class TaskImpl implements Task{
 
 
     // Methods
+    @Override
     public String getTitle(){
         /**
          * This method return the title of the task, given as a string.
@@ -53,13 +54,15 @@ public class TaskImpl implements Task{
         return title;
     }
 
-     public void setTitle(String title){
+    @Override
+    public void setTitle(String title){
          /**
           * This method allows to give a name to the task. The title must be given as a string.
           */
         this.title = title;
     }
 
+    @Override
     public boolean isActive() {
         /**
          * This method returns the status of the task, as a boolean.
@@ -68,6 +71,7 @@ public class TaskImpl implements Task{
         return active;
     }
 
+    @Override
     public void setActive(boolean active) {
         /**
          * This method allows to change the task status, to active or inactive.
@@ -76,6 +80,7 @@ public class TaskImpl implements Task{
         this.active = active;
     }
 
+    @Override
     public int getTime() {
         /**
          * If the task is repetitive, this method returns the time when the task starts.
@@ -90,6 +95,7 @@ public class TaskImpl implements Task{
 
     }
 
+    @Override
     public void setTime(int time) {
         /**
          * This method allows to set the time of execution for a non-repetitive task. The time
@@ -101,6 +107,7 @@ public class TaskImpl implements Task{
 
     }
 
+    @Override
     public int getStartTime() {
         /**
          * If the task is repetitive, this method returns the time when the task starts.
@@ -114,6 +121,7 @@ public class TaskImpl implements Task{
         }
     }
 
+    @Override
     public int getEndTime() {
         /**
          * If the task is repetitive, this method returns the time when the task ends.
@@ -127,6 +135,7 @@ public class TaskImpl implements Task{
         }
     }
 
+    @Override
     public int getRepeatInterval() {
         /**
          * If the task is repetitive, this method returns the repeat interval expressed in hours.
@@ -140,6 +149,7 @@ public class TaskImpl implements Task{
         }
     }
 
+    @Override
     public void setTime(int start, int end, int interval) {
         /**
          * This method allows to set the time for starting and ending the task, as well as the repeat
@@ -153,6 +163,7 @@ public class TaskImpl implements Task{
 
     }
 
+    @Override
     public boolean isRepeated() {
         /**
          * This method allows to know if the task is repetitive or non-repetitive
@@ -162,6 +173,7 @@ public class TaskImpl implements Task{
         return repeat;
     }
 
+    @Override
     public int nextTimeAfter(int current) {
         /**
          * This method allows to know the nearest moment when the task is going to be executed,
