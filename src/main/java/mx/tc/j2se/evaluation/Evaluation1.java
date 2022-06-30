@@ -4,17 +4,23 @@ public class Evaluation1 {
 
     public static void main(String[] args) {
 
-        Circle circle1 = new Circle();
-        Circle circle2 = new Circle(4);
-        Circle circle3 = new Circle(8);
+        try{
+            Circle circle = new Circle(-2);
+        } catch(IllegalArgumentException e){
+            System.out.println("Sorry, little human, your circle is invalid. Try again :)");
+        }
 
-        circle1.setRadius(3);
+        Circle circle1 = new Circle();
+        Circle circle2 = new Circle();
+        Circle circle3 = new Circle(5);
+
+        circle2.setRadius(15);
 
         Circle[] myArray = {circle1,circle2,circle3};
-        int bigIndex=biggestCircle(myArray);
-        int theBiggest=(myArray[bigIndex]).getRadius();
+        int index=biggestCircle(myArray);
+        int radius=(myArray[index]).getRadius();
+        System.out.println("The radius of the biggest circle is" + " " + radius);
 
-        System.out.println(theBiggest);
     }
 
     public static int biggestCircle(Circle[] circleArray){
@@ -22,9 +28,9 @@ public class Evaluation1 {
         int index=0;
         double biggestOne=0;
         for (int i=0;i<size;i++){
-            Circle currentCircle=circleArray[i];
-            double area=currentCircle.getArea();
+            double area=(circleArray[i]).getArea();
             if (area>biggestOne){
+                biggestOne=area;
                 index=i;
             }
         }
