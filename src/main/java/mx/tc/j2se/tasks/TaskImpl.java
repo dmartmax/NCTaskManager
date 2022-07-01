@@ -18,32 +18,46 @@ public class TaskImpl implements Task{
          */
     }
 
-    public TaskImpl(String title, int time){
+    public TaskImpl(String title, int time) throws IllegalArgumentException{
         /**
          * This constructor builds an inactive, non-repetitive task. In order to do this,
-         * it needs a title (string) for the task to build and the beginning time.
-         * This number needs to be positive integer, because it refers to time.
+         * it needs a title (string) for the task to build and the execution time.
+         * An exception will be thrown if the input is negative, since it refers to time.
          */
         this.title = title;
-        this.time = time;
-        repeat=false;
         active=false;
+        if (time<=0){
+            throw new IllegalArgumentException("The execution time must be a positive integer.");
+        }
+        else{
+            this.time = time;
+            repeat=false;
+        }
+
     }
 
-    public TaskImpl(String title, int start, int end, int interval){
+    public TaskImpl(String title, int start, int end, int interval) throws IllegalArgumentException{
         /**
          * This constructor builds an inactive, repetitive task. In order to do this, it needs a title (string)
          * for the task. Also, it needs the date for starting and ending the task, as well as an interval
-         * expressed in hours. All of these numbers need to be positive integers, because they refer to time.
+         * expressed in hours. An exception will be thrown if any of these input numbers is negative.
          */
         this.title = title;
-        this.start = start;
-        this.end = end;
-        this.interval = interval;
-        repeat=true;
         active=false;
-    }
 
+        if (start>0 && end>0 && interval>0){
+            this.start = start;
+            this.end = end;
+            this.interval = interval;
+            repeat=true;
+        } else if (start<=0){
+            throw new IllegalArgumentException("The starting time must be a positive integer.");
+        } else if (end<=0) {
+            throw new IllegalArgumentException("The ending time must be a positive integer.");
+        } else if (interval<=0) {
+            throw new IllegalArgumentException("The interval must be a positive integer.");
+        }
+    }
 
     // Methods
     @Override
@@ -96,15 +110,19 @@ public class TaskImpl implements Task{
     }
 
     @Override
-    public void setTime(int time) {
+    public void setTime(int time) throws IllegalArgumentException{
         /**
-         * This method allows to set the time of execution for a non-repetitive task. The time
-         * given must be a positive integer. If the task was built as repetitive, this method
-         * will change it to a non-repetitive one.
+         * This method allows to set the time of execution for a non-repetitive task. The time given
+         * must be a positive integer. If the method receives a negative input, an exception will be
+         * thrown. If the task was built as repetitive, this method will change it to a non-repetitive one.
          */
-        this.time = time;
-        repeat=false;
-
+        if (time<=0){
+            throw new IllegalArgumentException("The execution time must be a positive integer.");
+        }
+        else{
+            this.time = time;
+            repeat=false;
+        }
     }
 
     @Override
@@ -150,17 +168,25 @@ public class TaskImpl implements Task{
     }
 
     @Override
-    public void setTime(int start, int end, int interval) {
+    public void setTime(int start, int end, int interval) throws IllegalArgumentException{
         /**
          * This method allows to set the time for starting and ending the task, as well as the repeat
          * interval, for repetitive tasks. All of these values must be given as positive integers.
-         * If the task was built as non-repetitive, this method will change it to a repetitive one.
+         * The method does not allow negative inputs. It throws an Exception when this happens.
+         *If the task was built as non-repetitive, this method will change it to a repetitive one.
          */
-        this.start = start;
-        this.end = end;
-        this.interval = interval;
-        repeat=true;
-
+        if (start>0 && end>0 && interval>0){
+            this.start = start;
+            this.end = end;
+            this.interval = interval;
+            repeat=true;
+        } else if (start<=0){
+            throw new IllegalArgumentException("The starting time must be a positive integer.");
+        } else if (end<=0) {
+            throw new IllegalArgumentException("The ending time must be a positive integer.");
+        } else if (interval<=0) {
+            throw new IllegalArgumentException("The interval must be a positive integer.");
+        }
     }
 
     @Override
@@ -174,14 +200,15 @@ public class TaskImpl implements Task{
     }
 
     @Override
-    public int nextTimeAfter(int current) {
+    public int nextTimeAfter(int current) throws IllegalArgumentException {
         /**
          * This method allows to know the nearest moment when the task is going to be executed,
-         * for a current given time, which needs to be a positive integer. For this, the task
-         * needs to be active. If not, the return value will be -1.
+         * for a current given time, which needs to be a positive integer, since it refers to
+         * time. If the method receives a negative value, an exception will be thrown. Also, for
+         * getting the next time, the task needs to be active. If not, the return value will be -1.
          *
          * If the task is non-repetitive and the current time is located before the execution time,
-         * then the method will return the time value. If current time is located after execution time
+         * then the method will return the execution time. If current time is located after execution time
          * it will return -1, since the task has already been completed.
          *
          * If the task is repetitive and the current time occurs before the starting time, the method will
@@ -191,39 +218,44 @@ public class TaskImpl implements Task{
          * according to the given interval.
          */
 
-        if (active){
-            if (!repeat){
-                if(current<time){
-                    return time;
-                }
-                else{
-                    return -1;
-                }
-            }
-
-            else{
-                if(current<start){
-                    return start;
-                }
-                else if (start<current && current<end) {
-                    int next=start;
-                    while (next<current){
-                        next+=interval;
-                    }
-                    if (next>=end){
-                        return -1;
-                    }
-                    else {
-                        return next;
-                    }
-                }
-                else{
-                    return -1;
-                }
-            }
+        if (current<=0){
+            throw new IllegalArgumentException("The current time must be a positive integer.");
         }
         else{
-            return -1;
+            if (active){
+                if (!repeat){
+                    if(current<time){
+                        return time;
+                    }
+                    else{
+                        return -1;
+                    }
+                }
+
+                else{
+                    if(current<start){
+                        return start;
+                    }
+                    else if (start<current && current<end) {
+                        int next=start;
+                        while (next<current){
+                            next+=interval;
+                        }
+                        if (next>=end){
+                            return -1;
+                        }
+                        else {
+                            return next;
+                        }
+                    }
+                    else{
+                        return -1;
+                    }
+                }
+            }
+            else{
+                return -1;
+            }
         }
     }
 
