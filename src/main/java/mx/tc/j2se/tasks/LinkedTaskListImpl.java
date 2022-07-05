@@ -1,9 +1,8 @@
 package mx.tc.j2se.tasks;
 
-public class LinkedTaskListImpl implements LinkedTaskList {
+public class LinkedTaskListImpl extends AbstractTaskList {
     //Attributes
     Node startingNode;
-    int size=0;
     boolean success;
 
     //Constructor
@@ -32,7 +31,7 @@ public class LinkedTaskListImpl implements LinkedTaskList {
                 }
                 movingNode.setLinkedTo(newNode);
             }
-            this.size++;
+            super.size++;
         }
 
 
@@ -71,19 +70,12 @@ public class LinkedTaskListImpl implements LinkedTaskList {
                 movingNode.setLinkedTo(newNode);
             }
             this.success=true;
-            this.size--;
+            super.size--;
         }
         else{
             this.success=false;
         }
         return this.success;
-    }
-
-    @Override
-    public int size() {
-        /**
-         * Returns the number of elements in the list*/
-        return this.size;
     }
 
     @Override
@@ -101,38 +93,6 @@ public class LinkedTaskListImpl implements LinkedTaskList {
                 movingNode=movingNode.getLinkedTo();
             }
             return movingNode.getData();
-        }
-    }
-
-    @Override
-    public LinkedTaskList incoming(int from, int to) throws IllegalArgumentException {
-        /**
-         * Returns a linked list containing the tasks that are going to be executed within the given interval.
-         * Both values must be positive integers, since it refers to time. The tasks must be active to be considered.
-         */
-        if (from<=0 || to<=0){
-            throw new IllegalArgumentException("Both input arguments must be positive integers.");
-        }
-        else{
-            LinkedTaskList incomingTasks=new LinkedTaskListImpl();
-            for(int i=0;i<size;i++){
-                Task currentTask=getTask(i);
-                if(currentTask.isActive()){
-                    int nextExecution=currentTask.nextTimeAfter(from);
-                    if (currentTask.isRepeated()){
-                        while (nextExecution>from && nextExecution<to) {
-                            incomingTasks.add(currentTask);
-                            nextExecution = currentTask.nextTimeAfter(nextExecution);
-                        }
-                    }
-                    else{
-                        if(nextExecution>from && nextExecution<to){
-                            incomingTasks.add(currentTask);
-                        }
-                    }
-                }
-            }
-            return incomingTasks;
         }
     }
 

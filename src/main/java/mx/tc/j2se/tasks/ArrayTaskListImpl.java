@@ -1,9 +1,8 @@
 package mx.tc.j2se.tasks;
 
-public class ArrayTaskListImpl implements ArrayTaskList {
+public class ArrayTaskListImpl extends AbstractTaskList {
     //Attributes
     Task[] taskList;
-    int size=0;
     boolean success;
 
     //Constructor
@@ -25,7 +24,7 @@ public class ArrayTaskListImpl implements ArrayTaskList {
             if(size==0){
                 this.taskList = new Task[1];
                 this.taskList[size]=task;
-                this.size=1;
+                super.size=1;
             }
             else {
                 Task[] tempList = new Task[size+1];
@@ -36,7 +35,7 @@ public class ArrayTaskListImpl implements ArrayTaskList {
                 this.taskList=null;
                 System.gc();
                 this.taskList=tempList;
-                this.size++;
+                super.size++;
             }
         }
     }
@@ -83,20 +82,12 @@ public class ArrayTaskListImpl implements ArrayTaskList {
             this.taskList=null;
             System.gc();
             this.taskList=newList;
-            this.size--;
+            super.size--;
         }
         else{
             success=false;
         }
         return success;
-    }
-
-    @Override
-    public int size() {
-        /**
-         * The method returns the number of tasks included in the array.
-         */
-        return size;
     }
 
     @Override
@@ -114,39 +105,6 @@ public class ArrayTaskListImpl implements ArrayTaskList {
         }
         else {
             return taskList[index];
-        }
-    }
-
-    @Override
-    public ArrayTaskList incoming (int from, int to) throws IllegalArgumentException{
-        /**
-         * This method returns an array with the tasks executed within the given interval.
-         * The tasks included in the created array must be ACTIVE. As the input values refer
-         * to time, they must be positive integers. If not, an exception will be thrown.
-         */
-        if (from<=0 || to<=0) {
-            throw new IllegalArgumentException("Both inputs arguments must be positive integers.");
-        }
-        else{
-            ArrayTaskList incomingTasks = new ArrayTaskListImpl();
-            for(int i=0; i<size; i++) {
-                Task currentTask=getTask(i);
-                if (currentTask.isActive()){
-                    int nextMoment=currentTask.nextTimeAfter(from);
-                    if (currentTask.isRepeated()){//for repetitive tasks;
-                        while (nextMoment>from && nextMoment<to){
-                            incomingTasks.add(currentTask);
-                            nextMoment=currentTask.nextTimeAfter(nextMoment);
-                        }
-                    }
-                    else{//for non-repetitive tasks;
-                        if (nextMoment>from && nextMoment<to){
-                            incomingTasks.add(currentTask);
-                        }
-                    }
-                }
-            }
-            return incomingTasks;
         }
     }
 
